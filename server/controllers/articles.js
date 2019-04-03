@@ -5,7 +5,7 @@ module.exports = {
   getAllArticles: (req, res) => {
     //api call to get newest feed of articles
     parser.parseURL(
-      "http://export.arxiv.org/api/query?search_query=all:data science+OR+psychiatry+OR+therapy+OR+machine learning&start=0&max_results=500",
+      "http://export.arxiv.org/api/query?search_query=all:data science+OR+psychiatry+OR+therapy+OR+machine learning&start=0&max_results=20",
       (err, feed) => {
         err
           ? res.json({ message: "error", err })

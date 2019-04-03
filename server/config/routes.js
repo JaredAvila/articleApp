@@ -1,6 +1,5 @@
 const path = require("path"),
-  articles = require("../controllers/articles"),
-  authors = require("../controllers/authors");
+  articles = require("../controllers/articles");
 
 module.exports = app => {
   //api routes will go here
@@ -8,11 +7,6 @@ module.exports = app => {
   //GET - retrieves all articles
   app.get("/api/articles", (req, res) => {
     articles.getAllArticles(req, res);
-  });
-
-  //GET - retrieves all authors
-  app.get("/api/authors", (req, res) => {
-    authors.getAllAuthors(req, res);
   });
 
   //REDIRECT TO ANGULAR IF NO OTHER ROUTES ARE HIT
