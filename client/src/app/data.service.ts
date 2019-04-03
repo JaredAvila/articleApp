@@ -1,9 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class DataService {
+  constructor(private _http: HttpClient) {}
 
-  constructor() { }
+  //ARTICLE ROUTES
+  getAllCurrent() {
+    return this._http.get("/api/articles");
+  }
 }
