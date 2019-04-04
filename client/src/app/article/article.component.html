@@ -1,3 +1,6 @@
-<p>
-  {{ article.title }}
-</p>
+<div class="article">
+  <p>
+    <strong>{{ article.title._text }}</strong>
+  </p>
+  <button (click)="onArticleClick(article)" class="btn btn-blue">READ MORE</button>
+</div>

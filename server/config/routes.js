@@ -4,9 +4,14 @@ const path = require("path"),
 module.exports = app => {
   //api routes will go here
 
-  //GET - retrieves all articles
-  app.get("/api/articles", (req, res) => {
+  //POST - retrieves all articles with xml String
+  app.post("/api/articles", (req, res) => {
     articles.getAllArticles(req, res);
+  });
+
+  //POST - retrieve author
+  app.post("/api/author", (req, res) => {
+    articles.getAuthor(req, res);
   });
 
   //REDIRECT TO ANGULAR IF NO OTHER ROUTES ARE HIT

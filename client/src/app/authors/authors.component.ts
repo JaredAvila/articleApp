@@ -18,9 +18,9 @@ export class AuthorsComponent implements OnInit {
 
   //Gets all the current articles and then fills the authors array with the articles
   getAllAuthors() {
-    this._service.getAllCurrent().subscribe(data => {
-      this.data = data;
-      this.authors = this.data["data"]["items"];
-    });
+    // this._service.getAllCurrent().subscribe(data => {
+    //   this.data = data;
+    //   this.authors = this.data["data"]["items"];
+    // });
   }
 }

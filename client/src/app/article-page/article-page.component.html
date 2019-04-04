@@ -1,0 +1,22 @@
+<div *ngIf="article" class="article">
+  <h2>{{ article.title._text }}</h2>
+  <div class="authorName" *ngIf="article.author.name">
+    Author:
+    <em (click)="handleAuthorClick(article.author.name._text)">{{
+      article.author.name._text
+    }}</em>
+  </div>
+  <div *ngIf="article.author.length" class="authorName">
+    Authors:
+    <div *ngFor="let author of article.author" class="authors">
+      <em (click)="handleAuthorClick(author.name._text)">{{
+        author.name._text
+      }}</em>
+    </div>
+  </div>
+  <h5><strong>Summary:</strong></h5>
+  <p>{{ article.summary._text }}</p>
+</div>
+<div *ngIf="!article">
+  <h2>No article found. Try again</h2>
+</div>

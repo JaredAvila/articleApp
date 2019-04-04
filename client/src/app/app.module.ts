@@ -9,9 +9,11 @@ import { ArticlesComponent } from "./articles/articles.component";
 import { AuthorsComponent } from "./authors/authors.component";
 import { NavbarComponent } from './navbar/navbar.component';
 import { ArticleComponent } from './article/article.component';
+import { ArticlePageComponent } from './article-page/article-page.component';
+import { AuthorPageComponent } from './author-page/author-page.component';
 
 @NgModule({
-  declarations: [AppComponent, ArticlesComponent, AuthorsComponent, NavbarComponent, ArticleComponent],
+  declarations: [AppComponent, ArticlesComponent, AuthorsComponent, NavbarComponent, ArticleComponent, ArticlePageComponent, AuthorPageComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [DataService],
   bootstrap: [AppComponent]
