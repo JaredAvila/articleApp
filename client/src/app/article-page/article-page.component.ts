@@ -21,7 +21,6 @@ export class ArticlePageComponent implements OnInit {
       "http://export.arxiv.org/api/query?search_query=au:" +
       author +
       "&sortBy=submittedDate&sortOrder=descending&start=0&max_results=10";
-    // console.log(author);
     this._service.getAuthor(url).subscribe(data => {
       this._service.storeCurrentAuthor(data, author);
       this.router.navigate(["/authorPage"]);

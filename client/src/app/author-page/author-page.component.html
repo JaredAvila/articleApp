@@ -1,8 +1,14 @@
-<h2>{{ authorName }}</h2>
-<h4>Recent Articles</h4>
-<ul class="articles">
-  <li *ngFor="let article of authorData.result.feed.entry">
-    <app-article [article]="article"></app-article>
-    <!-- <p (click)="onArticleClick(article)">{{ article.title._text }}</p> -->
-  </li>
-</ul>
+<div *ngIf="authorData">
+  <h2>{{ authorName }}</h2>
+  <h4>Recent Articles</h4>
+  <button (click)="filterLastThirtyDays()">Test</button>
+  <ul class="articles">
+    <li *ngFor="let article of authorData.result.feed.entry">
+      <app-article [article]="article"></app-article>
+      <!-- <p (click)="onArticleClick(article)">{{ article.title._text }}</p> -->
+    </li>
+  </ul>
+</div>
+<div *ngIf="!authorData">
+  <h2>No articles were found. Try again.</h2>
+</div>
