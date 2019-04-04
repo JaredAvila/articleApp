@@ -1,9 +1,9 @@
 <div *ngIf="authorData">
   <h2>{{ authorName }}</h2>
   <h4>Recent Articles</h4>
-  <button (click)="filterLastThirtyDays()">Test</button>
+  <button (click)="showArticlesList()">Test</button>
   <ul class="articles">
-    <li *ngFor="let article of authorData.result.feed.entry">
+    <li *ngFor="let article of articles">
       <app-article [article]="article"></app-article>
       <!-- <p (click)="onArticleClick(article)">{{ article.title._text }}</p> -->
     </li>

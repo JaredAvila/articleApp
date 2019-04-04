@@ -16,6 +16,9 @@ export class AuthorPageComponent implements OnInit {
       }
     }
   };
+  articles: Array<Object> = [];
+  start = 0;
+  end = 9;
 
   constructor(private _service: DataService, private _router: Router) {}
 
@@ -23,20 +26,33 @@ export class AuthorPageComponent implements OnInit {
     this.getAuthor();
   }
 
+  //get authors data and sets it in Component state
   getAuthor() {
     this._service.getCurrentAuthor().subscribe(data => {
       this.authorData = data;
+      //gets all articles from last 30 days
+      this.filterLastThirtyDays();
     });
     this.authorName = this._service.getCurrentAuthorName();
   }
 
-  filterLastThirtyDays() {
-    console.log("Articles array: ", this.authorData["result"]["feed"]["entry"]);
+  //gets new XML string with author data, variable articles array
+  setNewAuthorXML(start, end) {
+    this._service
+      .getAuthorArticlesXML(this.authorName, start, end)
+      .subscribe(xml => {
+        this._service.storeCurrentAuthor(xml, this.authorName);
+        this.getAuthor();
+      });
+  }
 
+  //filters only last 30 days of articles
+  filterLastThirtyDays() {
+    this.articles = this.authorData["result"]["feed"]["entry"];
     //map through articles and pull out the array of dates.
-    let articles = this.authorData["result"]["feed"]["entry"];
-    const dates = articles.map(article => article.published._text.slice(0, 10));
-    console.log("dates array: ", dates);
+    const dates = this.articles.map(article =>
+      article["published"]["_text"].slice(0, 10)
+    );
 
     //get the date 30 days ago
     var date = new Date(new Date().setDate(new Date().getDate() - 30));
@@ -47,15 +63,28 @@ export class AuthorPageComponent implements OnInit {
     let dayNum = dateStr.slice(8, 11);
     let yearNum = dateStr.slice(11, 15);
     let date30DaysAgo = yearNum + "-" + monthNum + "-" + dayNum;
-
-    //checks dates and flags if any are longer than 30 days ago
-    //returns index of article that is out of bounds
     let dateBounds = Date.parse(date30DaysAgo);
-    if (!this.checkArticleDates(dates, dateBounds)) {
-      //trigger another getArticles type function
+
+    //checks dates and updates array accordingly
+    let index = this.checkArticleDates(dates, dateBounds);
+    if (index === false) {
+      //haven't reached the dateBounds yet, run it again! (recursive call)
+      this.buildArticleArray();
+    } else {
+      //found articles out of dateBounds. Append with spliced articles
+      this.articles = this.articles.splice(0, index);
     }
   }
 
+  //updates start and end bounds for article retrieval and resets author data
+  buildArticleArray() {
+    this.start += 10;
+    this.end += 10;
+    console.log("start ", this.start, " end ", this.end);
+    this.setNewAuthorXML(this.start, this.end);
+  }
+
+  //checks for any dates that are out of bounds
   checkArticleDates(dates: Array<string>, dateBounds: number) {
     for (let i = 0; i < dates.length; i++) {
       let publishedDate = Date.parse(dates[i]);
@@ -64,9 +93,11 @@ export class AuthorPageComponent implements OnInit {
         return i;
       }
     }
+    //if all dates are within 30 days return false
     return false;
   }
 
+  //converts the month name to a number
   monthNameToNumber(month: String) {
     switch (month) {
       case "Jan":
@@ -96,6 +127,7 @@ export class AuthorPageComponent implements OnInit {
     }
   }
 
+  //stores clicked article in the service and re-routes to article page
   onArticleClick(article) {
     this._service.storeClickedArticle(article);
     this._router.navigate(["/articlePage"]);

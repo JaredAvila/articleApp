@@ -16,14 +16,14 @@ export class ArticlePageComponent implements OnInit {
     this.article = this._service.getCurrentArticle();
   }
 
-  handleAuthorClick(author) {
-    let url =
-      "http://export.arxiv.org/api/query?search_query=au:" +
-      author +
-      "&sortBy=submittedDate&sortOrder=descending&start=0&max_results=10";
-    this._service.getAuthor(url).subscribe(data => {
-      this._service.storeCurrentAuthor(data, author);
-      this.router.navigate(["/authorPage"]);
-    });
+  handleAuthorClick(authorName) {
+    let start = "0",
+      end = "10";
+    this._service
+      .getAuthorArticlesXML(authorName, start, end)
+      .subscribe(xml => {
+        this._service.storeCurrentAuthor(xml, authorName);
+        this.router.navigate(["/authorPage"]);
+      });
   }
 }

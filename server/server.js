@@ -4,7 +4,7 @@ const express = require("express"),
   port = 8000;
 
 //bring in middleware
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb" }));
 
 //serve Angular app
 app.use(express.static(__dirname + "../../client/dist/client"));

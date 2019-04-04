@@ -7,40 +7,60 @@ import { Router } from "@angular/router";
 })
 export class DataService {
   article: any;
-  author: any;
+  xml: any;
   authorName: any;
 
   constructor(private _http: HttpClient, private router: Router) {}
 
   //ARTICLE ROUTES
 
-  //get 20 articles
+  //gets XML string text for 20 articles
   getAllCurrent() {
     return this._http.get(
       "http://export.arxiv.org/api/query?search_query=all:data%20science+OR+psychiatry+OR+therapy+OR+machine%20learning&start=0&max_results=20",
       { responseType: "text" }
     );
   }
-  getAuthor(url) {
+
+  //gets XML string for author object with variable article array
+  getAuthorArticlesXML(author, start, end) {
+    let url =
+      "http://export.arxiv.org/api/query?search_query=au:" +
+      author +
+      "&sortBy=submittedDate&sortOrder=descending&start=" +
+      start +
+      "&max_results=" +
+      end;
     return this._http.get(url, { responseType: "text" });
   }
+
+  //gets 20 articles
   getAllArticles(xmlText) {
     return this._http.post("/api/articles", { xmlText });
   }
 
+  //stores the clicked article in service
   storeClickedArticle(article) {
     this.article = article;
   }
+
+  //returns currently selected article object
   getCurrentArticle() {
     return this.article;
   }
-  storeCurrentAuthor(xml, author) {
-    this.authorName = author;
-    this.author = xml;
+
+  //stores selected authors name and XML string
+  storeCurrentAuthor(xml, authorName) {
+    this.authorName = authorName;
+    this.xml = xml;
   }
+
+  //gets selected author object
   getCurrentAuthor() {
-    return this._http.post("/api/author", { xml: this.author });
+    return this._http.post("/api/author", { xml: this.xml });
   }
+
+  //gets selected author name
   getCurrentAuthorName() {
     return this.authorName;
   }
