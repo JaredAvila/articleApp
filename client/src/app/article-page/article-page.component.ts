@@ -18,7 +18,7 @@ export class ArticlePageComponent implements OnInit {
 
   handleAuthorClick(authorName) {
     let start = "0",
-      end = "10";
+      end = "99";
     this._service
       .getAuthorArticlesXML(authorName, start, end)
       .subscribe(xml => {

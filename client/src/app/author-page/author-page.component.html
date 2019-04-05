@@ -1,7 +1,6 @@
 <div *ngIf="authorData">
   <h2>{{ authorName }}</h2>
   <h4>Recent Articles</h4>
-  <button (click)="showArticlesList()">Test</button>
   <ul class="articles">
     <li *ngFor="let article of articles">
       <app-article [article]="article"></app-article>

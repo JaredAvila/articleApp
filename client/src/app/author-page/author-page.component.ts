@@ -18,7 +18,7 @@ export class AuthorPageComponent implements OnInit {
   };
   articles: Array<Object> = [];
   start = 0;
-  end = 9;
+  end = 99;
 
   constructor(private _service: DataService, private _router: Router) {}
 
@@ -48,7 +48,10 @@ export class AuthorPageComponent implements OnInit {
 
   //filters only last 30 days of articles
   filterLastThirtyDays() {
-    this.articles = this.authorData["result"]["feed"]["entry"];
+    let articles = this.authorData["result"]["feed"]["entry"];
+    for (let i = 0; i < articles.length; i++) {
+      this.articles.push(articles[i]);
+    }
     //map through articles and pull out the array of dates.
     const dates = this.articles.map(article =>
       article["published"]["_text"].slice(0, 10)
@@ -73,13 +76,14 @@ export class AuthorPageComponent implements OnInit {
     } else {
       //found articles out of dateBounds. Append with spliced articles
       this.articles = this.articles.splice(0, index);
+      console.log("the end");
     }
   }
 
   //updates start and end bounds for article retrieval and resets author data
   buildArticleArray() {
-    this.start += 10;
-    this.end += 10;
+    this.start += 100;
+    this.end += 100;
     console.log("start ", this.start, " end ", this.end);
     this.setNewAuthorXML(this.start, this.end);
   }

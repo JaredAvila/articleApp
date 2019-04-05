@@ -15,26 +15,39 @@ export class DataService {
   //ARTICLE ROUTES
 
   //gets XML string text for 20 articles
-  getAllCurrent() {
+  getAllCurrent(start, end) {
     return this._http.get(
-      "http://export.arxiv.org/api/query?search_query=all:data%20science+OR+psychiatry+OR+therapy+OR+machine%20learning&start=0&max_results=20",
+      "http://export.arxiv.org/api/query?search_query=all:data%20science+OR+psychiatry+OR+therapy+OR+machine%20learning&start=" +
+        start +
+        "&max_results=" +
+        end,
       { responseType: "text" }
     );
   }
 
   //gets XML string for author object with variable article array
   getAuthorArticlesXML(author, start, end) {
+    // let authorName = author.split(" ");
+    // let authorString = "";
+    // for (let i = 0; i < authorName.length; i++) {
+    //   if (i === 0) {
+    //     authorString += authorName[i];
+    //   } else {
+    //     authorString += "+" + authorName[i];
+    //   }
+    // }
+    // console.log(authorString);
     let url =
-      "http://export.arxiv.org/api/query?search_query=au:" +
+      "http://export.arxiv.org/api/query?search_query=au:'" +
       author +
-      "&sortBy=submittedDate&sortOrder=descending&start=" +
+      "'&sortBy=submittedDate&sortOrder=descending&start=" +
       start +
       "&max_results=" +
       end;
     return this._http.get(url, { responseType: "text" });
   }
 
-  //gets 20 articles
+  //gets 30 articles
   getAllArticles(xmlText) {
     return this._http.post("/api/articles", { xmlText });
   }

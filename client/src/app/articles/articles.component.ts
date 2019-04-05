@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, HostListener } from "@angular/core";
 import { DataService } from "../data.service";
 
 @Component({
@@ -8,28 +8,53 @@ import { DataService } from "../data.service";
 })
 export class ArticlesComponent implements OnInit {
   articleData: Object;
-  articles: Array<Object>;
+  articles: Array<Object> = [];
+  start = 0;
+  end = 29;
+  xmlText: String;
 
   constructor(private _service: DataService) {}
 
-  xmlText: String;
   ngOnInit() {
     this.getXMLText();
   }
 
   //gets the XML as a string to pass to server to parse
   getXMLText() {
-    this._service.getAllCurrent().subscribe(data => {
+    this._service.getAllCurrent(this.start, this.end).subscribe(data => {
       this.xmlText = data;
       this.getAllArticles(this.xmlText);
     });
   }
 
-  //passes XML string to be returned as JSON
+  //when at bottom of page load next 30 articles
+  loadNextThirty() {
+    this.start += 30;
+    this.end += 30;
+    this.getXMLText();
+  }
+  //detects when user has hit the bottom of page and triggers next call
+  @HostListener("window:scroll", [])
+  onScroll() {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      this.loadNextThirty();
+    }
+  }
+
+  //passes XML string to be returned as JSON, sets artcile date in component state
   getAllArticles(xmlText) {
     this._service.getAllArticles(xmlText).subscribe(data => {
       this.articleData = data;
-      this.articles = this.articleData["result"]["feed"]["entry"];
+      for (
+        let i = 0;
+        i < this.articleData["result"]["feed"]["entry"].length;
+        i++
+      ) {
+        // console.log(this.articleData["result"]["feed"]["entry"][i]);
+        this.articles.push(this.articleData["result"]["feed"]["entry"][i]);
+      }
+
+      console.log(this.articles);
     });
   }
 }

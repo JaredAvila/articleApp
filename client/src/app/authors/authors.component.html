@@ -1,5 +1,5 @@
 <ul>
   <li *ngFor="let author of authors">
-    {{ author.author }}
+    <button (click)="handleAuthorClick(author)">{{ author }}</button>
   </li>
 </ul>
